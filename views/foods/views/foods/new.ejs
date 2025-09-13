@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Add Food</title>
+  </head>
+  <body>
+    <%- include('../partials/_navbar.ejs') %>
+    <h1>Add a new item to your Pantry</h1>
+    <form method="POST" action="/users/<%= user %>/foods">
+      <label for="name">Food Name:</label>
+      <input type="text" id="name" name="name" required>
+      <button type="submit">Add Item</button>
+    </form>
+    <a href="/users/<%= user %>/foods">Back to Pantry</a>
+  </body>
+</html>
