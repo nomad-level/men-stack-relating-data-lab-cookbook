@@ -47,32 +47,35 @@ router.post('/sign-up', async (req, res) => {
 
 router.post('/sign-in', async (req, res) => {
   try {
+    console.log('Sign-in attempt:', req.body);
     // First, get the user from the database
     const userInDatabase = await User.findOne({ username: req.body.username });
+    console.log('User found in DB:', userInDatabase);
     if (!userInDatabase) {
+      console.log('No user found with that username.');
       return res.send('Login failed. Please try again.');
     }
-  
+
     // There is a user! Time to test their password with bcrypt
     const validPassword = bcrypt.compareSync(
       req.body.password,
       userInDatabase.password
     );
+    console.log('Password valid?', validPassword);
     if (!validPassword) {
+      console.log('Password did not match.');
       return res.send('Login failed. Please try again.');
     }
-  
+
     // There is a user AND they had the correct password. Time to make a session!
-    // Avoid storing the password, even in hashed format, in the session
-    // If there is other data you want to save to `req.session.user`, do so here!
     req.session.user = {
       username: userInDatabase.username,
       _id: userInDatabase._id
     };
-  
+    console.log('Session set:', req.session.user);
     res.redirect('/');
   } catch (error) {
-    console.log(error);
+    console.log('Error during sign-in:', error);
     res.redirect('/');
   }
 });
